@@ -70,6 +70,8 @@
   - `./scripts/verifier-deployabilite.sh` : aucune borne.
   - Image `frontend` reconstruite et republiée (l'API n'a pas changé) ; redéployée avec `podman compose ... up -d --force-recreate`. Vérifié sur la VM : `/health` et `/sante` répondent `200` sur 8080 et 8081, l'écran « Qui êtes-vous ? » s'affiche toujours.
   - Reporté : `e2e/demo.spec.ts` toujours pas mis à jour (deux itérations de suite) — à faire si une itération de stabilisation le permet.
+  - Développeur : `$URL_PUBLIQUE/health` et `/sante` confirmés OK dans le navigateur.
+  - **Signalé à PM Lab** : `./scripts/signaler-version.sh 2` → version 2 enregistrée.
   - **Modifications** :
     - `frontend/src/lib/besoin.ts` (+ test) : type `ChoixBesoin` et fonction pure `orienterBesoin` — sert les 3 critères.
     - `frontend/src/app/page.tsx` : remplace le `<select>` OUI/NON par les trois choix, ajoute le bouton de validation et la liste (en dur) des sessions de formation à organiser — sert les 3 critères.
