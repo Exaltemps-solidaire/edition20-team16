@@ -11,11 +11,20 @@ const LIBELLES_CHOIX: Record<ChoixBesoin, string> = {
   je_ne_sais_pas: "Je ne sais pas",
 };
 
+type Passage = { commerce: string; repasserPour: string; date: string };
+
 export default function Home() {
   const [personaId, setPersonaId] = useState<string | null>(null);
   const [choix, setChoix] = useState<ChoixBesoin | null>(null);
+  const [repasserPour, setRepasserPour] = useState("");
+  const [dateProchainPassage, setDateProchainPassage] = useState("");
   const [sessionsAOrganiser, setSessionsAOrganiser] = useState<string[]>([]);
+  const [passagesAPrevoir, setPassagesAPrevoir] = useState<Passage[]>([]);
   const persona = personaId ? trouverPersona(personaId) : undefined;
+
+  const besoinValidable =
+    choix !== null &&
+    (choix !== "accompagnement" || (repasserPour.trim() !== "" && dateProchainPassage !== ""));
 
   if (!persona) {
     return (
@@ -63,13 +72,40 @@ export default function Home() {
               {LIBELLES_CHOIX[option]}
             </label>
           ))}
+          {choix === "accompagnement" && (
+            <>
+              <label>
+                Repasser pour
+                <input
+                  type="text"
+                  value={repasserPour}
+                  onChange={(e) => setRepasserPour(e.target.value)}
+                />
+              </label>
+              <label>
+                Date de prochain passage
+                <input
+                  type="date"
+                  value={dateProchainPassage}
+                  onChange={(e) => setDateProchainPassage(e.target.value)}
+                />
+              </label>
+            </>
+          )}
           <button
             type="button"
-            disabled={!choix}
+            disabled={!besoinValidable}
             onClick={() => {
               if (!choix) return;
-              if (orienterBesoin(choix).creeSessionFormation) {
+              const orientation = orienterBesoin(choix);
+              if (orientation.creeSessionFormation) {
                 setSessionsAOrganiser((sessions) => [...sessions, COMMERCE_FICTIF.nom]);
+              }
+              if (orientation.creePassage) {
+                setPassagesAPrevoir((passages) => [
+                  ...passages,
+                  { commerce: COMMERCE_FICTIF.nom, repasserPour, date: dateProchainPassage },
+                ]);
               }
             }}
           >
@@ -79,6 +115,14 @@ export default function Home() {
         <p>
           Sessions de formation à organiser :{" "}
           {sessionsAOrganiser.length === 0 ? "aucune" : sessionsAOrganiser.join(", ")}
+        </p>
+        <p>
+          Passages à prévoir :{" "}
+          {passagesAPrevoir.length === 0
+            ? "aucun"
+            : passagesAPrevoir
+                .map((p) => `${p.commerce} (${p.repasserPour}, le ${p.date})`)
+                .join(" · ")}
         </p>
       </main>
     </div>

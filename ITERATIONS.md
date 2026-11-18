@@ -92,7 +92,17 @@
 - **Fichiers prévus** (~3) : `frontend/src/lib/besoin.ts` (étendre `Orientation` avec un indicateur de passage), son test, `frontend/src/app/page.tsx`.
 - **Tests unitaires prévus** (1 à 3) : sur la fonction qui décide, à partir du choix, s'il faut afficher/enregistrer un passage (et confirme qu'elle n'ajoute jamais aussi une session de formation).
 - **Étapes ajoutées à la démo** : sélectionner « Accompagnement », remplir et valider un passage, vérifier qu'il apparaît dans la bonne liste.
-- **Bilan** : _à remplir en fin d'itération._ Si le temps manque pour aller plus loin ensuite, cette itération sert aussi de stabilisation finale (DoD complète, démo à jour) plutôt que d'enchaîner une itération 4.
+- **Bilan** :
+  - Temps restant annoncé en début d'itération : 15-20 minutes (réponse du développeur le 2026-11-18 à 17:48). Plan validé par les cadreurs à l'oral avant codage.
+  - Codage réel : 1 minute, bien sous le budget.
+  - Les 3 critères d'acceptation sont satisfaits : « Accompagnement » fait apparaître « Repasser pour » et « Date de prochain passage » (et bloque la validation tant qu'ils sont vides) ; une fois validé, le commerce apparaît dans « Passages à prévoir » et pas dans « Sessions de formation à organiser » ; les deux autres choix n'affichent pas ces champs et n'alimentent jamais cette liste.
+  - 3 tests Vitest (réécrits pour couvrir aussi `creePassage`), `npm test` passe à la racine (2 api + 6 front = 8 tests). Lint clean, build Next OK.
+  - `./scripts/verifier-deployabilite.sh` : aucune borne.
+  - Image `frontend` reconstruite et republiée (l'API n'a pas changé) ; redéployée avec `podman compose ... up -d --force-recreate`. Vérifié sur la VM : `/health` et `/sante` répondent `200` sur 8080 et 8081.
+  - Reporté : `e2e/demo.spec.ts` toujours pas mis à jour (trois itérations de suite) — à faire en itération de stabilisation si le temps le permet.
+  - **Modifications** :
+    - `frontend/src/lib/besoin.ts` (+ test) : `Orientation` gagne `creePassage` — sert les 3 critères.
+    - `frontend/src/app/page.tsx` : champs « Repasser pour » / « Date de prochain passage » conditionnels, liste « Passages à prévoir », validation qui exige ces champs pour « Accompagnement » — sert les 3 critères.
 
 ## À venir
 

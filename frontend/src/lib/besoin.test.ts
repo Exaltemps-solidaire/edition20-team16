@@ -3,14 +3,23 @@ import { orienterBesoin } from "./besoin";
 
 describe("orienterBesoin", () => {
   it("crée une session de formation quand le choix est « formation »", () => {
-    expect(orienterBesoin("formation").creeSessionFormation).toBe(true);
+    expect(orienterBesoin("formation")).toEqual({
+      creeSessionFormation: true,
+      creePassage: false,
+    });
   });
 
-  it("ne crée pas de session de formation pour un accompagnement", () => {
-    expect(orienterBesoin("accompagnement").creeSessionFormation).toBe(false);
+  it("oriente vers un passage, sans session de formation, pour un accompagnement", () => {
+    expect(orienterBesoin("accompagnement")).toEqual({
+      creeSessionFormation: false,
+      creePassage: true,
+    });
   });
 
-  it("ne crée pas de session de formation quand la coordinatrice ne sait pas", () => {
-    expect(orienterBesoin("je_ne_sais_pas").creeSessionFormation).toBe(false);
+  it("ne crée ni session de formation ni passage quand la coordinatrice ne sait pas", () => {
+    expect(orienterBesoin("je_ne_sais_pas")).toEqual({
+      creeSessionFormation: false,
+      creePassage: false,
+    });
   });
 });
