@@ -100,6 +100,8 @@
   - `./scripts/verifier-deployabilite.sh` : aucune borne.
   - Image `frontend` reconstruite et republiée (l'API n'a pas changé) ; redéployée avec `podman compose ... up -d --force-recreate`. Vérifié sur la VM : `/health` et `/sante` répondent `200` sur 8080 et 8081.
   - Reporté : `e2e/demo.spec.ts` toujours pas mis à jour (trois itérations de suite) — à faire en itération de stabilisation si le temps le permet.
+  - Développeur : `$URL_PUBLIQUE/health` et `/sante` confirmés OK dans le navigateur.
+  - **Signalé à PM Lab** : `./scripts/signaler-version.sh 3` → version 3 enregistrée.
   - **Modifications** :
     - `frontend/src/lib/besoin.ts` (+ test) : `Orientation` gagne `creePassage` — sert les 3 critères.
     - `frontend/src/app/page.tsx` : champs « Repasser pour » / « Date de prochain passage » conditionnels, liste « Passages à prévoir », validation qui exige ces champs pour « Accompagnement » — sert les 3 critères.
