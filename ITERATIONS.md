@@ -5,6 +5,7 @@
 - **Source du plan** : proposé par l'agent. Aucun fichier de `cadrage/` ne contient « iteration » dans son nom, et `passation.json` n'a pas de clé `iterations` : `cadrage/6-plan-de-livraison.md` (repris aussi dans `7-prd.md`) donne l'ordre des 3 valeurs à livrer, mais pas un découpage en itérations ni une itération 0 de squelette. Ce plan reprend son ordre, retaillé en itérations qui tiennent dans le budget de 10 minutes de codage, avec un squelette publié en premier.
 - **Temps restant annoncé** : 30-45 minutes (réponse du développeur le 2026-11-18 à 17:07 — une fourchette, pas un chiffre : à reconfirmer au début de chaque itération).
 - **Durée du tour de test de l'équipe** : 5 minutes.
+- **Temps restant au début de l'itération 2** : 10-15 minutes (réponse du développeur le 2026-11-18 à 17:35).
 - **Capacité déduite** : une itération coûte son codage (≤10 min) + ~5 min de publication + 5 min de tour de test. Avec 30-45 minutes, ça tient pour 2 itérations courtes confortablement ; une 3ᵉ ne passe que si le temps réel est proche de 45 minutes et que les deux premières ne dépassent pas leur budget.
 - **Hors périmètre** (✂️, au-delà des 2 itérations détaillées) :
   - Itération « orientation vers un passage » (affichage de « Repasser pour » / « Date de prochain passage ») — reportée en itération 3, à ne détailler que si le temps le permet.
@@ -62,7 +63,17 @@
 - **Fichiers prévus** (~4) : le composant du formulaire de suivi, un type/fonction d'orientation du besoin, son test.
 - **Tests unitaires prévus** (1 à 3) : sur la fonction qui, à partir du choix sélectionné, décide s'il faut créer une session de formation ou orienter vers un passage.
 - **Étapes ajoutées à la démo** : sélection de chacun des trois choix sur le formulaire, validation.
-- **Bilan** : _à remplir en fin d'itération._
+- **Bilan** :
+  - Codage réel : 1 minute (plateforme et images déjà prêtes depuis l'itération 1), bien sous le budget — vu les 10-15 minutes annoncées, pas de dépassement possible.
+  - Les 3 critères d'acceptation sont satisfaits : les trois choix distincts remplacent le OUI/NON ambigu ; le choix sélectionné est retenu via `orienterBesoin` ; « Accompagnement » et « Je ne sais pas » n'ajoutent rien à la liste (en dur) des sessions de formation à organiser, affichée sur l'écran — seul « Former l'équipe » le fait.
+  - 3 tests Vitest ajoutés (`frontend/src/lib/besoin.test.ts`), `npm test` passe à la racine (2 api + 6 front = 8 tests). Lint clean, build Next OK.
+  - `./scripts/verifier-deployabilite.sh` : aucune borne.
+  - Image `frontend` reconstruite et republiée (l'API n'a pas changé) ; redéployée avec `podman compose ... up -d --force-recreate`. Vérifié sur la VM : `/health` et `/sante` répondent `200` sur 8080 et 8081, l'écran « Qui êtes-vous ? » s'affiche toujours.
+  - Reporté : `e2e/demo.spec.ts` toujours pas mis à jour (deux itérations de suite) — à faire si une itération de stabilisation le permet.
+  - **Modifications** :
+    - `frontend/src/lib/besoin.ts` (+ test) : type `ChoixBesoin` et fonction pure `orienterBesoin` — sert les 3 critères.
+    - `frontend/src/app/page.tsx` : remplace le `<select>` OUI/NON par les trois choix, ajoute le bouton de validation et la liste (en dur) des sessions de formation à organiser — sert les 3 critères.
+    - `frontend/src/lib/personas.ts` : retire le champ `interetFormation`, devenu inutile (remplacé par `ChoixBesoin`).
 
 ---
 

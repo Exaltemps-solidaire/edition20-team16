@@ -10,7 +10,6 @@ export type Persona = {
 export type Commerce = {
   id: string;
   nom: string;
-  interetFormation: "OUI" | "NON";
 };
 
 export const PERSONAS: Persona[] = [
@@ -20,7 +19,6 @@ export const PERSONAS: Persona[] = [
 export const COMMERCE_FICTIF: Commerce = {
   id: "c1",
   nom: "Café du Carillon",
-  interetFormation: "NON",
 };
 
 export function trouverPersona(id: string): Persona | undefined {
