@@ -38,7 +38,16 @@
   - Base `team16` créée. Images qualifiées en `docker.io/library/...` dans les deux `Dockerfile` (sinon résolution de nom courte échoue hors terminal interactif). `podman-compose.yml` écrit à la racine (front sur 8080, api sur 8081, réseau `core-network`). Images construites et publiées sur `localhost:5000/team16/{api,frontend}:dev`, puis déployées avec `podman compose ... up -d --force-recreate`.
   - Vérifié depuis la VM : `curl localhost:8080/` affiche l'écran « Qui êtes-vous ? », `localhost:8080/health`, `localhost:8080/sante`, `localhost:8081/health`, `localhost:8081/sante` répondent tous `200`.
   - `./scripts/verifier-deployabilite.sh` : aucune borne. `npm test` (racine) : 5 tests verts.
-  - Reporté : rien sur le périmètre fonctionnel. Signalé à PM Lab une fois `$URL_PUBLIQUE` vérifiée par le développeur (demandé, non bloquant).
+  - Reporté : rien sur le périmètre fonctionnel. `e2e/demo.spec.ts` non mis à jour cette itération (temps pris par le blocage infra) — à faire en itération 2.
+  - Développeur : `$URL_PUBLIQUE/health` et `/sante` confirmés `ok` dans le navigateur.
+  - **Signalé à PM Lab** : `./scripts/signaler-version.sh 1` → version 1 enregistrée.
+  - **Modifications** :
+    - `frontend/src/lib/personas.ts` (+ test) : données en dur (persona, commerce fictif) et fonction `trouverPersona` — sert les critères 1 et 2.
+    - `frontend/src/app/page.tsx` : écran « Qui êtes-vous ? » puis formulaire de suivi, remplace la page par défaut de Next — sert les critères 1 et 2.
+    - `frontend/src/app/page.module.css`, `layout.tsx` : styles et métadonnées associés.
+    - `.env.example`, `DEPLOIEMENT.md` : contrat de déployabilité (règles 2 et 8) — sert le critère 3.
+    - `podman-compose.yml` : déploiement (front 8080, api 8081, réseau `core-network`).
+    - `api/Dockerfile`, `frontend/Dockerfile` : images de base qualifiées en `docker.io/library/...`.
 
 ## Itération 2 : La question à trois choix remplace la case ambiguë
 
