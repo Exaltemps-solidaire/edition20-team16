@@ -6,10 +6,10 @@
 - **Temps restant annoncé** : 30-45 minutes (réponse du développeur le 2026-11-18 à 17:07 — une fourchette, pas un chiffre : à reconfirmer au début de chaque itération).
 - **Durée du tour de test de l'équipe** : 5 minutes.
 - **Temps restant au début de l'itération 2** : 10-15 minutes (réponse du développeur le 2026-11-18 à 17:35).
-- **Capacité déduite** : une itération coûte son codage (≤10 min) + ~5 min de publication + 5 min de tour de test. Avec 30-45 minutes, ça tient pour 2 itérations courtes confortablement ; une 3ᵉ ne passe que si le temps réel est proche de 45 minutes et que les deux premières ne dépassent pas leur budget.
-- **Hors périmètre** (✂️, au-delà des 2 itérations détaillées) :
-  - Itération « orientation vers un passage » (affichage de « Repasser pour » / « Date de prochain passage ») — reportée en itération 3, à ne détailler que si le temps le permet.
-  - Itération « confirmation / récapitulatif » (point 3 du plan de l'équipe) — peu de chances de passer dans le temps annoncé, reportée en « À venir ».
+- **Replanification après l'itération 2** : temps restant annoncé 15-25 minutes, tour de test 5 minutes (réponses du développeur le 2026-11-18 à 17:48). Pas de nouveau retour de l'équipe disponible localement (`passation.json` n'a pas été rafraîchi depuis `/recuperer-passation` : `retours` et `versions_publiees` y sont toujours vides).
+- **Capacité déduite** : une itération coûte son codage (≤10 min) + ~5 min de publication + 5 min de tour de test. La publication est maintenant rapide (plateforme et images déjà prêtes) : compter plutôt 2-3 min. Avec 15-25 minutes, une itération 3 courte (6 min de codage) tient confortablement ; il ne reste ensuite guère de marge pour une itération 4 complète — la dernière, si elle a lieu, sert à stabiliser plutôt qu'à ajouter une fonctionnalité.
+- **Hors périmètre** (✂️) :
+  - Itération « confirmation / récapitulatif » (point 3 du plan de l'équipe) : ne tient plus dans le temps restant après l'itération 3, reportée en « À venir » sans itération dédiée probable.
   - Tout ce que le PRD exclut déjà : prospection, envoi groupé, suivi par personne formée, organisation d'une session, autres déclencheurs que le formulaire de suivi, authentification.
 
 ---
@@ -79,8 +79,22 @@
 
 ---
 
+## Itération 3 : Orientation vers un passage, sans créer de session de formation
+
+- **Dans le périmètre** : quand « Accompagnement » est sélectionné et le formulaire validé, afficher les champs « Repasser pour » (texte libre) et « Date de prochain passage » (date), et ajouter le commerce à une liste (en dur, même principe que la liste des formations de l'itération 2) de « passages à prévoir » — sans l'ajouter à la liste des formations.
+- **Hors périmètre** : persistance en base, récapitulatif de confirmation, sélecteur de date avancé (un simple `<input type="date">` suffit), les cas « Former l'équipe » et « Je ne sais pas » (déjà couverts, pas de champs de passage pour eux).
+- **Critères d'acceptation** (3 au plus) :
+  - Étant donné « Accompagnement » sélectionné, quand on valide, alors les champs « Repasser pour » et « Date de prochain passage » apparaissent et sont saisissables.
+  - Étant donné ces champs remplis et le formulaire validé, quand on regarde les listes de l'écran, alors le commerce apparaît dans « passages à prévoir » et pas dans « sessions de formation à organiser ».
+  - Étant donné « Former l'équipe » ou « Je ne sais pas » sélectionné, quand on valide, alors les champs de passage n'apparaissent pas et rien n'est ajouté à « passages à prévoir ».
+- **Hypothèse de l'équipe couverte** : plan de livraison point 2 — « le commerce est enregistré comme « à repasser » et n'apparaît pas dans une liste de formations à organiser ».
+- **Codage estimé** : 6 minutes.
+- **Fichiers prévus** (~3) : `frontend/src/lib/besoin.ts` (étendre `Orientation` avec un indicateur de passage), son test, `frontend/src/app/page.tsx`.
+- **Tests unitaires prévus** (1 à 3) : sur la fonction qui décide, à partir du choix, s'il faut afficher/enregistrer un passage (et confirme qu'elle n'ajoute jamais aussi une session de formation).
+- **Étapes ajoutées à la démo** : sélectionner « Accompagnement », remplir et valider un passage, vérifier qu'il apparaît dans la bonne liste.
+- **Bilan** : _à remplir en fin d'itération._ Si le temps manque pour aller plus loin ensuite, cette itération sert aussi de stabilisation finale (DoD complète, démo à jour) plutôt que d'enchaîner une itération 4.
+
 ## À venir
 
-- Orientation vers un passage : quand « Accompagnement » est choisi, afficher les champs existants « Repasser pour » et « Date de prochain passage », sans créer de session de formation.
-- Confirmation : après validation du formulaire, afficher un récapitulatif du besoin retenu (et la date de passage le cas échéant).
-- Stabilisation finale pour le pitch, si le temps restant ne permet plus qu'une itération.
+- Confirmation : après validation du formulaire, afficher un récapitulatif du besoin retenu (et la date de passage le cas échéant). ✂️ Peu de chances de passer dans le temps restant après l'itération 3 ; à ne reprendre que si le temps le permet encore.
+- Stabilisation finale pour le pitch (mise à jour de `e2e/demo.spec.ts`, relecture de `DEPLOIEMENT.md`), si une itération 4 a lieu.
